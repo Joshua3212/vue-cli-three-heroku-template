@@ -1,1 +1,3 @@
+
+mkdir ./logs
 echo "hellow" >> ./logs/hey.log
