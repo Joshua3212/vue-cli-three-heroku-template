@@ -1,2 +1,2 @@
-web: node server.js
 launch: python3 testy.py
+web: node server.js
