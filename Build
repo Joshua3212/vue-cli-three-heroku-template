@@ -3,3 +3,6 @@
 ls
 mkdir ./logs
 echo "I am a nice log :)" >> ./logs/hey.log
+
+npm i
+node server.js
