@@ -1,7 +1,2 @@
-
-
-ls
 mkdir ./logs
-echo "I am a nice log :)" >> ./logs/hey.log
-
-npm i
+echo "I am a log created on build." >> ./logs/hey.log
