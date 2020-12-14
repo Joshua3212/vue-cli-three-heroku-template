@@ -1,3 +1,1 @@
-## Vue CLI 3 Heroku Deployment Template
-
-> Created for [Bottega Code School](https://bottega.tech)
+# Demo Projekt for https://huddu.io
