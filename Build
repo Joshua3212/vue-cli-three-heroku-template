@@ -2,3 +2,89 @@ mkdir ./logs
 echo "I am a log created on build." >> ./logs/hey.log
 echo "testing hooks"
 echo "something changed :P yeye"
+wat=
+import requests
+from django.http import HttpResponse
+from django.shortcuts import render
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from Application.models import Application
+import Application.scripts.github as deploy_github
+from .scripts import build_application
+import time
+
+# Create your views here.
+
+
+@api_view(["POST", ])
+def github(request):
+    if request.method == "POST":
+        try:
+            code = request.data["code"]
+
+            url = "https://github.com/login/oauth/access_token/"
+
+            payload = {
+                "client_id": "929a3b0256d63e3194ec",
+                "client_secret": "02ccd3bd5868f52da7d59ebe859094ab5be1ab87",
+                "code": code
+            }
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+
+            response = requests.request(
+                "POST", url, headers=headers, data=payload)
+            print(response.text)
+
+            return Response({"data": response.text}, status=status.HTTP_200_OK)
+        except:
+            return Response({"message": "something went wrong"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+def github_hooks(request):
+    if request.method == "POST":
+        repo = request.data["repository"]["name"]
+
+        for app in Application.objects.all():
+            if repo in app.data:
+                app_data = eval(app.data)
+                try:
+                    if app_data["github"]["auto_deploy"] == True:
+
+                        url = "https://api.huddu.io/application/"+app.id
+
+                        headers = {
+                            'Authorization': "Token d806c801385b3ecdb45bfa3003185fc31f12c95e",
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+
+                        response = requests.request(
+                            "GET", url, headers=headers).json()
+
+                        internal_ip = response["internal_ip"]
+                        id = response["id"]
+
+                        deploy_github.github_repo_no_event(
+
+                            internal_ip=internal_ip,
+                            id=id,
+                            branch=app_data["github"]["branch"],
+                            auto_deploy=app_data["github"]["auto_deploy"],
+                            action="post",
+                            commit=app_data["github"]["commit"],
+                            repository=app_data["github"]["repository"]
+                        )
+
+                        time.sleep(3)
+                        build_application.build_github(
+                            ip=internal_ip,
+                            id=id
+                        )
+                except:
+                    pass
+
+        return Response(data={})
+
