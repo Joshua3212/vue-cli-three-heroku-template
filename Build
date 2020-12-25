@@ -1,3 +1,4 @@
 mkdir ./logs
 echo "I am a log created on build." >> ./logs/hey.log
 echo "testing hooks"
+echo "something changed :P"
