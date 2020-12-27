@@ -1,2 +1,8 @@
+#using bash language
+
+#installing dependencies
+npm i --save
+
+#logs demo
 mkdir ./logs
 echo "I am a log created on build." >> ./logs/hey.log
