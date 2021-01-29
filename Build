@@ -1,6 +1,6 @@
 #using bash language
 
-#installing dependencies
+#installing dependencies for your project
 npm i --save
 
 #logs demo
