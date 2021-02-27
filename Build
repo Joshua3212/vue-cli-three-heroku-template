@@ -1,7 +1,7 @@
 #using bash language
 
 #installing dependencies for your project
-npm i --save
+npm i express
 
 #logs demo
 mkdir ./logs
