@@ -1,2 +1,2 @@
 web node: node server.js
-launch: python test.py
+launch python: python test.py
